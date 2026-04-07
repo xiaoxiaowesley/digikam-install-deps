@@ -23,6 +23,7 @@ if(EXISTS ${EXT_CMAKE_BINARY})
 
     if("${_cmake_installed_version}" VERSION_EQUAL "${EXT_CMAKE_VERSION}")
         message(STATUS "CMake ${EXT_CMAKE_VERSION} is already installed at ${EXTPREFIX_cmake}, skipping build.")
+        add_custom_target(ext_cmake)
         return()
     else()
         message(STATUS "CMake version mismatch: installed=${_cmake_installed_version}, expected=${EXT_CMAKE_VERSION}. Rebuilding.")
