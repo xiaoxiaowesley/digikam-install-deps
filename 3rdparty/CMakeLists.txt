@@ -101,14 +101,59 @@ SET(PATCH_COMMAND patch)
 SET(GIT_CLONE_CACHE_DIR "${EXTERNALS_DOWNLOAD_DIR}/git_repos")
 SET(CACHED_GIT_CLONE_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/modules/CachedGitClone.cmake")
 
+# Option to force rebuild all libraries even if already installed
+OPTION(FORCE_REBUILD_ALL "Force rebuild all 3rd-party libraries" OFF)
+
+# Function to skip already-installed libraries
+FUNCTION(ADD_SUBDIRECTORY_IF_NEEDED _subdir _marker_desc)
+    # Collect remaining arguments as marker files
+    SET(_markers ${ARGN})
+
+    # Per-library force rebuild option
+    STRING(TOUPPER "${_subdir}" _upper)
+    OPTION(FORCE_REBUILD_${_upper} "Force rebuild ${_subdir}" OFF)
+
+    IF(FORCE_REBUILD_ALL OR FORCE_REBUILD_${_upper})
+        MESSAGE(STATUS "[REBUILD] ${_subdir}: force rebuild requested")
+        ADD_SUBDIRECTORY(${_subdir})
+        RETURN()
+    ENDIF()
+
+    # Check if any marker file exists
+    FOREACH(_marker IN LISTS _markers)
+        IF(EXISTS "${_marker}")
+            MESSAGE(STATUS "[SKIP] ${_subdir}: already installed (found ${_marker_desc})")
+            RETURN()
+        ENDIF()
+    ENDFOREACH()
+
+    MESSAGE(STATUS "[BUILD] ${_subdir}: not yet installed")
+    ADD_SUBDIRECTORY(${_subdir})
+ENDFUNCTION()
+
 # NOTE: this list must be dependency-ordered
 
-ADD_SUBDIRECTORY(ext_cmake)
-ADD_SUBDIRECTORY(ext_openssl)
-ADD_SUBDIRECTORY(ext_jasper)
-ADD_SUBDIRECTORY(ext_qt6)
-ADD_SUBDIRECTORY(ext_kf6)
-ADD_SUBDIRECTORY(ext_heif)
-ADD_SUBDIRECTORY(ext_opencv)
-ADD_SUBDIRECTORY(ext_exiv2)
+ADD_SUBDIRECTORY_IF_NEEDED(ext_cmake   "cmake binary"
+    "${INSTALL_ROOT}/bin/cmake")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_openssl "openssl headers"
+    "${INSTALL_ROOT}/local/include/openssl/ssl.h")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_jasper  "jasper headers"
+    "${INSTALL_ROOT}/include/jasper/jasper.h")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_qt6    "Qt6 cmake config"
+    "${INSTALL_ROOT}/lib/cmake/Qt6/Qt6Config.cmake")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_kf6    "KF6 KIO cmake config"
+    "${INSTALL_ROOT}/lib/cmake/KF6KIO/KF6KIOConfig.cmake")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_heif   "libheif headers"
+    "${INSTALL_ROOT}/include/libheif/heif.h")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_opencv "OpenCV cmake config"
+    "${INSTALL_ROOT}/lib/cmake/opencv4/OpenCVConfig.cmake")
+
+ADD_SUBDIRECTORY_IF_NEEDED(ext_exiv2  "exiv2 headers"
+    "${INSTALL_ROOT}/include/exiv2/exiv2.hpp")
 

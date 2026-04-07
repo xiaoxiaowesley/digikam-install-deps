@@ -23,6 +23,7 @@ if (NOT APPLE)
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_openssl}
                    -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                    -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE
+                   -DCPM_SOURCE_CACHE=${EXTERNALS_DOWNLOAD_DIR}/cpm_cache
                    -DOPENSSL_BUILD_VERBOSE=ON
                    -DOPENSSL_ENABLE_PARALLEL=OFF
                    -DOPENSSL_INSTALL=ON
