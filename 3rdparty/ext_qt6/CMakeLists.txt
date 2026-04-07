@@ -8,6 +8,8 @@
 
 set(EXTPREFIX_qt ${EXTPREFIX})
 
+message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
+
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
 
     set(QT_URL https://download.qt.io/official_releases/qt/6.10/6.10.2/single/qt-everywhere-src-6.10.2.tar.xz)
