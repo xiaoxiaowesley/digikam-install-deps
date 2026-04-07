@@ -125,8 +125,12 @@ if(APPLE)
     ExternalProject_Add(ext_opencv
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        GIT_REPOSITORY https://github.com/opencv/opencv.git
-        GIT_TAG 4.13.0
+        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+            -DGIT_URL=https://github.com/opencv/opencv.git
+            -DGIT_TAG=4.13.0
+            -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/opencv
+            -DSOURCE_DIR=<SOURCE_DIR>
+            -P ${CACHED_GIT_CLONE_SCRIPT}
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.${DK_APPLE_PACKAGE_MANAGER} <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.${DK_APPLE_PACKAGE_MANAGER} ${EXTPREFIX_opencv} RelWithDebInfo ${ARCH_TARGET} "${BASH_OPTIONS}"
@@ -146,8 +150,12 @@ else() # Linux
     ExternalProject_Add(ext_opencv
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        GIT_REPOSITORY https://github.com/opencv/opencv.git
-        GIT_TAG 4.13.0
+        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+            -DGIT_URL=https://github.com/opencv/opencv.git
+            -DGIT_TAG=4.13.0
+            -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/opencv
+            -DSOURCE_DIR=<SOURCE_DIR>
+            -P ${CACHED_GIT_CLONE_SCRIPT}
 
         INSTALL_DIR ${EXTPREFIX_opencv}
 

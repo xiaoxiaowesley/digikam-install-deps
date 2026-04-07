@@ -54,8 +54,12 @@ if(APPLE)
     ExternalProject_Add(ext_heif
 
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        GIT_REPOSITORY https://github.com/strukturag/libheif.git
-        GIT_TAG v1.21.2
+        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+            -DGIT_URL=https://github.com/strukturag/libheif.git
+            -DGIT_TAG=v1.21.2
+            -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/libheif
+            -DSOURCE_DIR=<SOURCE_DIR>
+            -P ${CACHED_GIT_CLONE_SCRIPT}
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/heif-lib-only.patch
 
@@ -80,8 +84,12 @@ else() # Linux
     ExternalProject_Add(ext_heif
 
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        GIT_REPOSITORY https://github.com/strukturag/libheif.git
-        GIT_TAG v1.20.2
+        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+            -DGIT_URL=https://github.com/strukturag/libheif.git
+            -DGIT_TAG=v1.20.2
+            -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/libheif
+            -DSOURCE_DIR=<SOURCE_DIR>
+            -P ${CACHED_GIT_CLONE_SCRIPT}
 
         PATCH_COMMAND git reset --hard && ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/heif-lib-only.patch
 

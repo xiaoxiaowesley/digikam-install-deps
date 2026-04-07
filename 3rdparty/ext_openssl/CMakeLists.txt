@@ -11,8 +11,12 @@ if (NOT APPLE)
 
     ExternalProject_Add(ext_openssl
 
-        GIT_REPOSITORY https://github.com/jimmy-park/openssl-cmake.git
-        GIT_TAG 3.6.1
+        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+            -DGIT_URL=https://github.com/jimmy-park/openssl-cmake.git
+            -DGIT_TAG=3.6.1
+            -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/openssl-cmake
+            -DSOURCE_DIR=<SOURCE_DIR>
+            -P ${CACHED_GIT_CLONE_SCRIPT}
 
         INSTALL_DIR ${EXTPREFIX_openssl}
 

@@ -10,9 +10,13 @@ SET(EXTPREFIX_cmake "${EXTPREFIX}")
 
 ExternalProject_Add(ext_cmake
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    
-    GIT_REPOSITORY https://github.com/Kitware/CMake.git
-    GIT_TAG v4.3.0
+
+    DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+        -DGIT_URL=https://github.com/Kitware/CMake.git
+        -DGIT_TAG=v4.3.0
+        -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/cmake
+        -DSOURCE_DIR=<SOURCE_DIR>
+        -P ${CACHED_GIT_CLONE_SCRIPT}
 
     INSTALL_DIR ${EXTPREFIX_cmake}
 

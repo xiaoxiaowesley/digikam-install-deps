@@ -11,8 +11,12 @@ SET(PREFIX_ext_jasper "${EXTPREFIX}")
 ExternalProject_Add(ext_jasper
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-    GIT_REPOSITORY https://github.com/jasper-software/jasper.git
-    GIT_TAG version-4.2.9
+    DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+        -DGIT_URL=https://github.com/jasper-software/jasper.git
+        -DGIT_TAG=version-4.2.9
+        -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/jasper
+        -DSOURCE_DIR=<SOURCE_DIR>
+        -P ${CACHED_GIT_CLONE_SCRIPT}
 
     INSTALL_DIR ${PREFIX_ext_jasper}
 

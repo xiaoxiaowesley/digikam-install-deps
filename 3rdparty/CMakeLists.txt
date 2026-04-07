@@ -97,6 +97,10 @@ SET(GLOBAL_BUILD_TYPE RelWithDebInfo)
 SET(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 SET(PATCH_COMMAND patch)
 
+# Git clone cache directory for faster rebuilds
+SET(GIT_CLONE_CACHE_DIR "${EXTERNALS_DOWNLOAD_DIR}/git_repos")
+SET(CACHED_GIT_CLONE_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/modules/CachedGitClone.cmake")
+
 # NOTE: this list must be dependency-ordered
 
 ADD_SUBDIRECTORY(ext_cmake)

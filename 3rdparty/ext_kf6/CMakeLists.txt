@@ -43,8 +43,12 @@ function(InstallKF6Component
 
         ExternalProject_Add(ext_${name}
                             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-                            GIT_REPOSITORY ${giturl}
-                            GIT_TAG ${version}
+                            DOWNLOAD_COMMAND ${CMAKE_COMMAND}
+                                -DGIT_URL=${giturl}
+                                -DGIT_TAG=${version}
+                                -DCACHE_DIR=${GIT_CLONE_CACHE_DIR}/${name}
+                                -DSOURCE_DIR=<SOURCE_DIR>
+                                -P ${CACHED_GIT_CLONE_SCRIPT}
 
                             PATCH_COMMAND ${patch}
 
