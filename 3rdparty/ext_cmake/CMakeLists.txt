@@ -8,6 +8,29 @@
 
 SET(EXTPREFIX_cmake "${EXTPREFIX}")
 
+# Check if CMake is already installed with the expected version.
+SET(EXT_CMAKE_VERSION "4.3.0")
+SET(EXT_CMAKE_BINARY "${EXTPREFIX_cmake}/bin/cmake")
+
+if(EXISTS ${EXT_CMAKE_BINARY})
+    execute_process(
+        COMMAND ${EXT_CMAKE_BINARY} --version
+        OUTPUT_VARIABLE _cmake_version_output
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    # Extract version number from output like "cmake version 4.3.0"
+    string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" _cmake_installed_version "${_cmake_version_output}")
+
+    if("${_cmake_installed_version}" VERSION_EQUAL "${EXT_CMAKE_VERSION}")
+        message(STATUS "CMake ${EXT_CMAKE_VERSION} is already installed at ${EXTPREFIX_cmake}, skipping build.")
+        return()
+    else()
+        message(STATUS "CMake version mismatch: installed=${_cmake_installed_version}, expected=${EXT_CMAKE_VERSION}. Rebuilding.")
+    endif()
+else()
+    message(STATUS "CMake not found at ${EXT_CMAKE_BINARY}. Building from source.")
+endif()
+
 ExternalProject_Add(ext_cmake
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
