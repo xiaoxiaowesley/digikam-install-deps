@@ -103,7 +103,7 @@ InstallKF6Component(kglobalaccel             ${KDE_VERSION}     "${Qt6CommonOpti
 InstallKF6Component(kcalendarcore            ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
 InstallKF6Component(kxmlgui                  ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
 InstallKF6Component(kbookmarks               ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
-InstallKF6Component(kimageformats            ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
+InstallKF6Component(kimageformats            ${KDE_VERSION}     "${Qt6CommonOptions};-DCMAKE_DISABLE_FIND_PACKAGE_OpenEXR=TRUE"                              "")
 InstallKF6Component(knotifyconfig            ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
 InstallKF6Component(knotifications           ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
 InstallKF6Component(kjobwidgets              ${KDE_VERSION}     "${Qt6CommonOptions}"                                                                       "")
