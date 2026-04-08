@@ -16,8 +16,9 @@
 
 # Step 1: Clone or update the cache repository
 # Add safe.directory configuration to handle Docker environments where UID may differ
+# Use '*' wildcard to mark all directories as safe (handles permission issues in containers)
 execute_process(
-    COMMAND git config --global --add safe.directory "${CACHE_DIR}"
+    COMMAND git config --global --add safe.directory "*"
     RESULT_VARIABLE GIT_CONFIG_RESULT
     ERROR_VARIABLE GIT_CONFIG_ERROR
 )
@@ -56,7 +57,7 @@ endif()
 # Step 2: Clone from cache to source directory (using hard links for speed)
 # Add safe.directory configuration for source directory as well
 execute_process(
-    COMMAND git config --global --add safe.directory "${SOURCE_DIR}"
+    COMMAND git config --global --add safe.directory "*"
     RESULT_VARIABLE GIT_CONFIG_SRC_RESULT
     ERROR_VARIABLE GIT_CONFIG_SRC_ERROR
 )
