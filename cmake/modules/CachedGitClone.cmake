@@ -15,6 +15,16 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # Step 1: Clone or update the cache repository
+# Add safe.directory configuration to handle Docker environments where UID may differ
+execute_process(
+    COMMAND git config --global --add safe.directory "${CACHE_DIR}"
+    RESULT_VARIABLE GIT_CONFIG_RESULT
+    ERROR_VARIABLE GIT_CONFIG_ERROR
+)
+if(NOT GIT_CONFIG_RESULT EQUAL 0)
+    message(WARNING "CachedGitClone: Failed to add safe.directory config (non-fatal):\n${GIT_CONFIG_ERROR}")
+endif()
+
 if(NOT EXISTS "${CACHE_DIR}/.git")
     message(STATUS "CachedGitClone: Cloning ${GIT_URL} to cache directory ${CACHE_DIR}")
     get_filename_component(CACHE_PARENT_DIR "${CACHE_DIR}" DIRECTORY)
@@ -44,6 +54,16 @@ else()
 endif()
 
 # Step 2: Clone from cache to source directory (using hard links for speed)
+# Add safe.directory configuration for source directory as well
+execute_process(
+    COMMAND git config --global --add safe.directory "${SOURCE_DIR}"
+    RESULT_VARIABLE GIT_CONFIG_SRC_RESULT
+    ERROR_VARIABLE GIT_CONFIG_SRC_ERROR
+)
+if(NOT GIT_CONFIG_SRC_RESULT EQUAL 0)
+    message(WARNING "CachedGitClone: Failed to add safe.directory config for source (non-fatal):\n${GIT_CONFIG_SRC_ERROR}")
+endif()
+
 if(NOT EXISTS "${SOURCE_DIR}/.git")
     message(STATUS "CachedGitClone: Creating local clone from cache to ${SOURCE_DIR}")
     execute_process(
